@@ -6,10 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nicefontaine.matcha.R;
-import com.nicefontaine.matcha.network.TicketResponse;
+import com.nicefontaine.matcha.network.Ticket;
 
 import java.util.List;
 
@@ -17,20 +18,20 @@ import java.util.List;
 public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHolder> {
 
     private LayoutInflater inflater;
-    private List<TicketResponse.Ticket> tickets;
+    private List<Ticket> tickets;
     private SelectedCallback listener;
 
     interface SelectedCallback {
-        void onSelected(TicketResponse.Ticket ticket);
+        void onSelected(Ticket ticket);
     }
 
-    public TicketAdapter(Context context, SelectedCallback listener, List<TicketResponse.Ticket> tickets) {
+    public TicketAdapter(Context context, SelectedCallback listener, List<Ticket> tickets) {
         this.inflater = LayoutInflater.from(context);
         this.listener = listener;
         setTickets(tickets);
     }
 
-    public void setTickets(List<TicketResponse.Ticket> tickets) {
+    public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
 
@@ -42,12 +43,12 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
 
     @Override
     public void onBindViewHolder(TicketAdapter.TicketHolder holder, int position) {
-        final TicketResponse.Ticket ticket = tickets.get(position);
+        final Ticket ticket = tickets.get(position);
         holder.ticketName.setText(ticket.name);
         holder.ticketPrice.setText(ticket.getPrice());
         holder.timeValidity.setText(ticket.duration);
         holder.peopleValidity.setText(ticket.getPeople());
-        listener.onSelected(tickets.get(position));
+        holder.layout.setOnClickListener(v -> listener.onSelected(tickets.get(position)));
     }
 
     @Override
@@ -61,6 +62,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
         private TextView ticketPrice;
         private TextView timeValidity;
         private TextView peopleValidity;
+        private LinearLayout layout;
 
         TicketHolder(View itemView) {
             super(itemView);
@@ -68,6 +70,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
             ticketPrice = (TextView) itemView.findViewById(R.id.ticket_price);
             timeValidity = (TextView) itemView.findViewById(R.id.time_validity);
             peopleValidity = (TextView) itemView.findViewById(R.id.people_validity);
+            layout = (LinearLayout) itemView.findViewById(R.id.bottom_layout);
         }
     }
 }

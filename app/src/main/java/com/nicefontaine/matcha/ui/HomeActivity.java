@@ -21,7 +21,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,7 +31,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.nicefontaine.matcha.MatchaApp;
 import com.nicefontaine.matcha.R;
@@ -43,13 +41,12 @@ import com.nicefontaine.matcha.data.sources.LocationDataSource;
 import com.nicefontaine.matcha.data.sources.ShapeDataSource;
 import com.nicefontaine.matcha.data.sources.TicketDataSource;
 import com.nicefontaine.matcha.network.Place;
-import com.nicefontaine.matcha.network.TicketResponse;
+import com.nicefontaine.matcha.network.Ticket;
 import com.nicefontaine.matcha.services.BestLocationService;
 import com.nicefontaine.matcha.utils.DialogManager;
 import com.nicefontaine.matcha.utils.MapDrawUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +74,7 @@ public class HomeActivity extends FragmentActivity implements
     private LocationManager locationManager;
     private GoogleMap googleMap;
     private Intent bestLocationService;
-    private List<TicketResponse.Ticket> tickets;
+    private List<Ticket> tickets;
     private TicketAdapter adapter;
     private List<Coordinate> viaPointsCoordinates;
     private List<LatLng> viaPointsLatLng;
@@ -92,7 +89,7 @@ public class HomeActivity extends FragmentActivity implements
     @Inject protected LocationDataSource locationDataSource;
     @Inject protected ShapeDataSource shapeDataSource;
     private Map<String, List<LatLng>> zones;
-    private boolean mapReady = false;
+    private boolean mapReady;
     private Polygon polygonA;
     private Polygon polygonB;
 
@@ -107,7 +104,6 @@ public class HomeActivity extends FragmentActivity implements
         mapFragment.getMapAsync(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         bestLocationService = new Intent(this, BestLocationService.class);
-        shapeDataSource.getShapes(this);
         initRecycler();
     }
 
@@ -130,6 +126,8 @@ public class HomeActivity extends FragmentActivity implements
                     }
                     return false;
                 });
+        shapeDataSource.getShapes(this);
+        mapReady = false;
     }
 
     private void hideKeyboard() {
@@ -194,7 +192,7 @@ public class HomeActivity extends FragmentActivity implements
         viaPointsLatLng.add(latLng);
         markers.add(MapDrawUtils.drawMarker(googleMap, latLng));
         ticketDataSource.getTickets(viaPointsCoordinates, this);
-        updateCamera();
+        if (mapReady) updateCamera();
     }
 
     private boolean checkLocationServicesEnabled() {
@@ -228,7 +226,8 @@ public class HomeActivity extends FragmentActivity implements
                 result[0] == PackageManager.PERMISSION_GRANTED;
     }
     @Override
-    public void onTickets(List<TicketResponse.Ticket> tickets) {
+    public void onTickets(List<Ticket> tickets) {
+        Timber.e(tickets.toString());
         adapter.setTickets(tickets);
         adapter.notifyDataSetChanged();
     }
@@ -264,14 +263,15 @@ public class HomeActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onSelected(TicketResponse.Ticket ticket) {
+    public void onSelected(Ticket ticket) {
+        Timber.e("blolb");
         String zone = ticket.zone;
-        if (zone.equals("VBB_A")) {
-            polygonB.setVisible(false);
-            polygonA.setVisible(true);
+        if (zone.equals("A")) {
+            if (polygonB != null) polygonB.setVisible(false);
+            if (polygonA != null) polygonA.setVisible(true);
         } else {
-            polygonA.setVisible(false);
-            polygonB.setVisible(true);
+            if (polygonA != null) polygonA.setVisible(false);
+            if (polygonB != null) polygonB.setVisible(true);
         }
     }
 }

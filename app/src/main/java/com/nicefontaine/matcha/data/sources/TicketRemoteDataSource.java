@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.nicefontaine.matcha.data.Coordinate;
 import com.nicefontaine.matcha.network.MatchaService;
-import com.nicefontaine.matcha.network.TicketResponse;
+import com.nicefontaine.matcha.network.Ticket;
 
 import java.util.List;
 
@@ -33,13 +33,13 @@ public class TicketRemoteDataSource implements TicketDataSource {
     @Override
     public void getTickets(@NonNull List<Coordinate> coordinates,
                            @NonNull final TicketDataSource.TicketCallback callback) {
-        Call<TicketResponse> call = matchaService.getTickets();
-        call.enqueue(new Callback<TicketResponse>() {
+        Call<List<Ticket>> call = matchaService.getTickets();
+        call.enqueue(new Callback<List<Ticket>>() {
 
             @Override
-            public void onResponse(Call<TicketResponse> call, Response<TicketResponse> response) {
+            public void onResponse(Call<List<Ticket>> call, Response<List<Ticket>> response) {
                 if (response != null && response.isSuccessful()) {
-                    List<TicketResponse.Ticket> tickets = response.body().tickets;
+                    List<Ticket> tickets = response.body();
                     callback.onTickets(tickets);
                 } else {
                     callback.onError();
@@ -47,7 +47,7 @@ public class TicketRemoteDataSource implements TicketDataSource {
             }
 
             @Override
-            public void onFailure(Call<TicketResponse> call, Throwable t) {
+            public void onFailure(Call<List<Ticket>> call, Throwable t) {
                 callback.onError();
             }
         });

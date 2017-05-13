@@ -49,9 +49,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetModule {
 
-    private static final String MATCHA_ENDPOINT = "http://192.168.124.1:4567";
+    private static final String MATCHA_ENDPOINT = "http://159.203.169.136:4567";
     private static final String NOMINATIM_ENDPOINT = "http://nominatim.openstreetmap.org/";
-    private static final String SHAPE_ENDPOINT = "http://192.168.124.1:5000";
+    private static final String SHAPE_ENDPOINT = "http://159.203.169.136:5000";
     private static final int CACHE_SIZE = 31457280;
 
     @Provides

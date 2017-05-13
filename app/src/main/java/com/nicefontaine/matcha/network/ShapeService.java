@@ -9,6 +9,6 @@ import retrofit2.http.GET;
 
 public interface ShapeService {
 
-    @GET("/shape")
+    @GET("/shapes")
     Call<Shapes> getShapes();
 }
