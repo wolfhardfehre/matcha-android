@@ -11,5 +11,6 @@ import retrofit2.http.Query;
 public interface NominatimService {
 
     @GET("/search")
-    Call<List<Place>> getLocations(@Query("data") String query);
+    Call<List<Place>> getLocations(@Query("format") String format,
+                                   @Query("q") String q);
 }

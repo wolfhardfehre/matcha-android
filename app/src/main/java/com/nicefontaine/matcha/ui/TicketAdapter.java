@@ -18,9 +18,15 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
 
     private LayoutInflater inflater;
     private List<TicketResponse.Ticket> tickets;
+    private SelectedCallback listener;
 
-    public TicketAdapter(Context context, List<TicketResponse.Ticket> tickets) {
+    interface SelectedCallback {
+        void onSelected(TicketResponse.Ticket ticket);
+    }
+
+    public TicketAdapter(Context context, SelectedCallback listener, List<TicketResponse.Ticket> tickets) {
         this.inflater = LayoutInflater.from(context);
+        this.listener = listener;
         setTickets(tickets);
     }
 
@@ -41,6 +47,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketHold
         holder.ticketPrice.setText(ticket.getPrice());
         holder.timeValidity.setText(ticket.duration);
         holder.peopleValidity.setText(ticket.getPeople());
+        listener.onSelected(tickets.get(position));
     }
 
     @Override

@@ -90,8 +90,9 @@ public class NetModule {
     @Provides
     @Singleton
     @Named("Nominatim")
-    Retrofit provideSensorRetrofit(OkHttpClient okHttpClient) {
+    Retrofit provideSensorRetrofit(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(NOMINATIM_ENDPOINT)
                 .client(okHttpClient)
                 .build();

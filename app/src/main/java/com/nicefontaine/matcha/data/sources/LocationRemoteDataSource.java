@@ -31,8 +31,7 @@ public class LocationRemoteDataSource implements LocationDataSource {
 
     @Override
     public void getLocation(@NonNull String query, @NonNull final LocationCallback callback) {
-        String requestQuery = String.format("format=json&q=%s", query);
-        Call<List<Place>> call = nominatimService.getLocations(requestQuery);
+        Call<List<Place>> call = nominatimService.getLocations("json", query);
         call.enqueue(new Callback<List<Place>>() {
 
             @Override

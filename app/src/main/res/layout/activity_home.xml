@@ -34,10 +34,12 @@
                 tools:ignore="RtlSymmetry">
 
                 <EditText
-                    android:id="@+id/from_edittext"
+                    android:id="@+id/position_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:hint="@string/hint_via_point"
+                    android:imeOptions="actionGo"
+                    android:inputType="textAutoComplete|textAutoCorrect|text"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/text_hint_size" />
             </LinearLayout>
@@ -55,6 +57,9 @@
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:elevation="4dp"
+            android:alpha="0.9"
+            android:background="@android:color/white"
             android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 

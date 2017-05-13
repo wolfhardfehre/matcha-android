@@ -1,6 +1,7 @@
 package com.nicefontaine.matcha.network;
 
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import java.text.DecimalFormat;
@@ -34,6 +35,11 @@ public class TicketResponse {
 
         public String getPeople() {
             return String.format(people == 1 ? "%s pers." : "%s ppl.", people);
+        }
+
+        @Override
+        public String toString() {
+            return new Gson().toJson(this);
         }
     }
 }
