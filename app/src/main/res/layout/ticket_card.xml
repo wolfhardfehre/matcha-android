@@ -34,7 +34,7 @@
                 android:padding="@dimen/standard_padding"
                 android:layout_gravity="center"
                 android:textColor="@color/primary_text"
-                android:textSize="@dimen/text_large"
+                android:textSize="@dimen/text_hint_size"
                 android:text="@string/ticket_name"/>
 
             <TextView
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/standard_padding"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_large"
+                android:textSize="@dimen/text_hint_size"
                 android:layout_weight="0.6"
                 android:layout_gravity="center"
                 android:text="@string/price"/>
@@ -71,7 +71,7 @@
                 android:padding="@dimen/standard_padding"
                 android:layout_gravity="center"
                 android:textColor="@color/primary_text"
-                android:textSize="@dimen/text_large"
+                android:textSize="@dimen/text_hint_size"
                 android:text="@string/time_valid"/>
 
             <TextView
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/standard_padding"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_large"
+                android:textSize="@dimen/text_hint_size"
                 android:layout_weight="0.6"
                 android:layout_gravity="center"
                 android:text="@string/number_people"/>
