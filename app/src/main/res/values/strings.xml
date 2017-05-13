@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Matcha</string>
     <string name="title_activity_home">Matcha</string>
+    <string name="hint_via_point">Add a via point</string>
+    <string name="price">2,10 €</string>
+    <string name="ticket_name">Single Ticket</string>
+    <string name="time_valid">2:00 hours valid</string>
+    <string name="number_people">1 pers.</string>
+    <string name="connection_error">Problems with the connection</string>
+    <string name="dialog_no_location_message">Please activate GPS</string>
+    <string name="dialog_ok">OK</string>
 </resources>

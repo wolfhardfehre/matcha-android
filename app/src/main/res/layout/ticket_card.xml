@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottom"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:elevation="4dp"
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/standard_padding"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_credit_card_black_48dp"/>
+
+            <TextView
+                android:id="@+id/ticket_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:padding="@dimen/standard_padding"
+                android:layout_gravity="center"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text_large"
+                android:text="@string/ticket_name"/>
+
+            <TextView
+                android:id="@+id/ticket_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/standard_padding"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_large"
+                android:layout_weight="0.6"
+                android:layout_gravity="center"
+                android:text="@string/price"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/standard_padding"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_hourglass_empty_black_48dp"/>
+
+            <TextView
+                android:id="@+id/time_validity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:padding="@dimen/standard_padding"
+                android:layout_gravity="center"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text_large"
+                android:text="@string/time_valid"/>
+
+            <TextView
+                android:id="@+id/people_validity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/standard_padding"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_large"
+                android:layout_weight="0.6"
+                android:layout_gravity="center"
+                android:text="@string/number_people"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

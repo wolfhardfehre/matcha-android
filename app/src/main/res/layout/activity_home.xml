@@ -1,8 +1,71 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.nicefontaine.matcha.HomeActivity" />
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:padding="@dimen/standard_padding">
+
+            <ImageView
+                android:id="@+id/plus_image"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_add_black_48dp"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/standard_padding"
+                android:orientation="vertical"
+                tools:ignore="RtlSymmetry">
+
+                <EditText
+                    android:id="@+id/from_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:hint="@string/hint_via_point"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/text_hint_size" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_below="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.nicefontaine.matcha.ui.HomeActivity" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_height="60dp"
+        android:layout_marginEnd="@dimen/standard_padding"
+        android:layout_marginStart="@dimen/standard_padding"
+        android:layout_width="60dp"
+        android:src="@drawable/ic_shopping_cart_white_48dp"
+        app:fabSize="normal"
+        app:layout_anchor="@id/recycler"
+        app:layout_anchorGravity="top|right|end"/>
+</android.support.design.widget.CoordinatorLayout>
