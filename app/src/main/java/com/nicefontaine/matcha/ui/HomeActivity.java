@@ -13,6 +13,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -32,12 +33,14 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.nicefontaine.matcha.MatchaApp;
 import com.nicefontaine.matcha.R;
 import com.nicefontaine.matcha.data.Coordinate;
 import com.nicefontaine.matcha.data.DefaultEventBus;
 import com.nicefontaine.matcha.data.OnLocationEvent;
 import com.nicefontaine.matcha.data.sources.LocationDataSource;
+import com.nicefontaine.matcha.data.sources.ShapeDataSource;
 import com.nicefontaine.matcha.data.sources.TicketDataSource;
 import com.nicefontaine.matcha.network.Place;
 import com.nicefontaine.matcha.network.TicketResponse;
@@ -48,6 +51,7 @@ import com.nicefontaine.matcha.utils.MapDrawUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -64,7 +68,7 @@ public class HomeActivity extends FragmentActivity implements
         OnMapReadyCallback,
         TicketDataSource.TicketCallback,
         LocationDataSource.LocationCallback,
-        TicketAdapter.SelectedCallback {
+        TicketAdapter.SelectedCallback, ShapeDataSource.ZonesCallback {
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int MAP_PADDING = 100;
@@ -86,6 +90,11 @@ public class HomeActivity extends FragmentActivity implements
     @Inject protected DefaultEventBus eventBus;
     @Inject protected TicketDataSource ticketDataSource;
     @Inject protected LocationDataSource locationDataSource;
+    @Inject protected ShapeDataSource shapeDataSource;
+    private Map<String, List<LatLng>> zones;
+    private boolean mapReady = false;
+    private Polygon polygonA;
+    private Polygon polygonB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +107,7 @@ public class HomeActivity extends FragmentActivity implements
         mapFragment.getMapAsync(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         bestLocationService = new Intent(this, BestLocationService.class);
+        shapeDataSource.getShapes(this);
         initRecycler();
     }
 
@@ -169,6 +179,7 @@ public class HomeActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        mapReady = true;
         this.googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_light));
         this.googleMap.setMyLocationEnabled(checkLocationPermission(this));
         this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -231,10 +242,20 @@ public class HomeActivity extends FragmentActivity implements
 
     private void updateCamera() {
         LatLngBounds bBox = MapDrawUtils.buildBBox(viaPointsLatLng);
-        if (googleMap != null) {
+        if (mapReady) {
             CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bBox, MAP_PADDING);
             googleMap.animateCamera(update, ANIMATION_DURATION_IN_MS, null);
         }
+    }
+
+    @Override
+    public void onZones(Map<String, List<LatLng>> zones) {
+        this.zones = zones;
+        int color = ContextCompat.getColor(this, R.color.colorAccent);
+        polygonA = MapDrawUtils.drawPolygon(googleMap, zones.get("VBB_A"), color);
+        polygonB = MapDrawUtils.drawPolygon(googleMap, zones.get("VBB_B"), color);
+        polygonA.setVisible(false);
+        polygonB.setVisible(false);
     }
 
     @Override
@@ -244,6 +265,13 @@ public class HomeActivity extends FragmentActivity implements
 
     @Override
     public void onSelected(TicketResponse.Ticket ticket) {
-        Timber.e(ticket.toString());
+        String zone = ticket.zone;
+        if (zone.equals("VBB_A")) {
+            polygonB.setVisible(false);
+            polygonA.setVisible(true);
+        } else {
+            polygonA.setVisible(false);
+            polygonB.setVisible(true);
+        }
     }
 }

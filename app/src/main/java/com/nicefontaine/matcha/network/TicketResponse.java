@@ -14,6 +14,9 @@ public class TicketResponse {
 
     public class Ticket {
 
+        @SerializedName("zone")
+        public String zone;
+
         @SerializedName("name")
         public String name;
 

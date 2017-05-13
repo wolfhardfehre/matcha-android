@@ -18,15 +18,19 @@ package com.nicefontaine.matcha.injection.modules;
 
 
 import android.app.Application;
+import android.graphics.drawable.shapes.Shape;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nicefontaine.matcha.data.sources.LocationDataSource;
 import com.nicefontaine.matcha.data.sources.LocationRemoteDataSource;
+import com.nicefontaine.matcha.data.sources.ShapeDataSource;
+import com.nicefontaine.matcha.data.sources.ShapeRemoteDataSource;
 import com.nicefontaine.matcha.data.sources.TicketDataSource;
 import com.nicefontaine.matcha.data.sources.TicketRemoteDataSource;
 import com.nicefontaine.matcha.network.MatchaService;
 import com.nicefontaine.matcha.network.NominatimService;
+import com.nicefontaine.matcha.network.ShapeService;
 
 import java.io.File;
 
@@ -45,8 +49,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetModule {
 
-    private static final String MATCHA_ENDPOINT = "http://10.230.251.250:5000";
+    private static final String MATCHA_ENDPOINT = "http://192.168.124.1:4567";
     private static final String NOMINATIM_ENDPOINT = "http://nominatim.openstreetmap.org/";
+    private static final String SHAPE_ENDPOINT = "http://192.168.124.1:5000";
     private static final int CACHE_SIZE = 31457280;
 
     @Provides
@@ -90,7 +95,7 @@ public class NetModule {
     @Provides
     @Singleton
     @Named("Nominatim")
-    Retrofit provideSensorRetrofit(Gson gson, OkHttpClient okHttpClient) {
+    Retrofit provideNominatimRetrofit(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(NOMINATIM_ENDPOINT)
@@ -100,14 +105,31 @@ public class NetModule {
 
     @Provides
     @Singleton
-    MatchaService provideMatchaService(@Named("Matcha")Retrofit retrofit) {
+    @Named("Shape")
+    Retrofit provideShapeRetrofit(Gson gson, OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(SHAPE_ENDPOINT)
+                .client(okHttpClient)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    MatchaService provideMatchaService(@Named("Matcha") Retrofit retrofit) {
         return retrofit.create(MatchaService.class);
     }
 
     @Provides
     @Singleton
-    NominatimService provideNominatimService(@Named("Nominatim")Retrofit retrofit) {
+    NominatimService provideNominatimService(@Named("Nominatim") Retrofit retrofit) {
         return retrofit.create(NominatimService.class);
+    }
+
+    @Provides
+    @Singleton
+    ShapeService provideShapeService(@Named("Shape") Retrofit retrofit) {
+        return retrofit.create(ShapeService.class);
     }
 
     @Provides
@@ -120,5 +142,11 @@ public class NetModule {
     @Singleton
     LocationDataSource provideLocationDataSource(NominatimService nominatimService) {
         return LocationRemoteDataSource.getInstance(nominatimService);
+    }
+
+    @Provides
+    @Singleton
+    ShapeDataSource provideShapeDataSource(ShapeService shapeService) {
+        return ShapeRemoteDataSource.getInstance(shapeService);
     }
 }

@@ -8,8 +8,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.List;
 
@@ -25,11 +25,10 @@ public class MapDrawUtils {
     }
 
     @NonNull
-    public static Polyline drawPolyline(GoogleMap map, List<LatLng> coordinates, int color) {
-        return map.addPolyline(
-                new PolylineOptions()
-                        .color(color)
-                        .width(10)
+    public static Polygon drawPolygon(GoogleMap map, List<LatLng> coordinates, int color) {
+        return map.addPolygon(
+                new PolygonOptions()
+                        .fillColor(color)
                         .addAll(coordinates)
                         .zIndex(1)
         );

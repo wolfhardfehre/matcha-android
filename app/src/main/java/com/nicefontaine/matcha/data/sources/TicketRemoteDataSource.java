@@ -33,7 +33,6 @@ public class TicketRemoteDataSource implements TicketDataSource {
     @Override
     public void getTickets(@NonNull List<Coordinate> coordinates,
                            @NonNull final TicketDataSource.TicketCallback callback) {
-        // TODO pass coordinates
         Call<TicketResponse> call = matchaService.getTickets();
         call.enqueue(new Callback<TicketResponse>() {
 
